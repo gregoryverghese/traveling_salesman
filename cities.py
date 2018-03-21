@@ -1,3 +1,4 @@
+import random
 from functools import reduce
 from earth_distance import distance
 
@@ -36,17 +37,18 @@ def compute_total_distance(road_map):
     (for example) in the initial `road_map`, Wyoming connects to Alabama...
     """
 
-    lattiudes = [city[2] for city in road_map]
-    longitudes = [city[3] for city in road_map]
-    lattiudes2 = list(lattiudes[(i + 1) % len(lattiudes)] for i in range(len(lattiudes)))
-    longitudes2 = list(longitudes[(i + 1) % len(longitudes)] for i in range(len(longitudes)))
-
-    y = distance(lattiudes[0], longitudes[0],  lattiudes2[0], longitudes2[0])
-
-    #k = list(map(distance, lattiudes, longitudes, lattiudes2, longitudes2))
-    #x = reduce(lambda x, y, z, k: distance(x, y, x, k), lattiudes, longitudes, lattiudes2, longitudes2)
-
-    intercity_dis = list(map(distance, lattiudes, longitudes, lattiudes2, longitudes2))
+    if len(road_map) > 2:
+        lattiudes = [city[2] for city in road_map]
+        longitudes = [city[3] for city in road_map]
+        lattiudes2 = [lattiudes[(i + 1) % len(lattiudes)] for i in range(len(lattiudes))]
+        longitudes2 = [longitudes[(i + 1) % len(longitudes)]  for i in range(len(longitudes))]
+        intercity_dis = list(map(distance, lattiudes, longitudes, lattiudes2, longitudes2))
+    else:
+        lattiudes = [road_map[0][2]]
+        longitudes = [road_map[0][3]]
+        lattiudes2 = [road_map[1][2]]
+        longitudes2 = [road_map[1][3]]
+        intercity_dis = list(map(distance, lattiudes, longitudes, lattiudes2, longitudes2))
 
     return reduce(lambda x, y: x+y, intercity_dis)
 
