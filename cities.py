@@ -83,7 +83,12 @@ def swap_cities(road_map, index1, index2):
     Allow for the possibility that `index1=index2`,
     and handle this case correctly.
     """
-    pass
+    adj_roadmap = road_map[:]
+    adj_roadmap[index2], adj_roadmap[index1] = adj_roadmap[index1], adj_roadmap[index2]
+
+    total_distance = compute_total_distance(adj_roadmap)
+
+    return (adj_roadmap, total_distance)
 
 def find_best_cycle(road_map):
     """

@@ -50,7 +50,7 @@ def test_swap_adjacent_cities(road_map):
 
 def test_swap_cities(road_map):
 
-        road_map_list = [('Alabama', 'Montgomery', 32.361538, -86.279118),
+        adjusted_road_map = [('Alabama', 'Montgomery', 32.361538, -86.279118),
                     ('Arkansas', 'Little Rock',	34.736009, -92.331122),
                     ('Arizona', 'Phoenix', 33.448457, -112.073844),
                     ('Alaska', 'Juneau', 58.301935, -134.41974)]
@@ -64,7 +64,7 @@ def test_swap_cities(road_map):
         assert new_distance == pytest.approx(6372, abs=30)
 
 
-def test_swap_citites_index1_equals_index2(road_map):
+def test_swap_cities_index1_equals_index2(road_map):
 
         new_road_map_tuple = swap_cities(road_map, index1=1, index2=1)
 
