@@ -1,4 +1,5 @@
 import pytest
+import thread
 from cities import *
 from earth_distance import distance
 
@@ -76,6 +77,30 @@ def test_swap_cities_index1_equals_index2(road_map):
 
 
 def test_swap_cities(road_map):
+
+    longer_roadmap = [('California', 'Sacramento', 38.555605,-121.468926),
+                    ('Colorado', 'Denver', 39.7391667, -104.984167),
+                    ('Connecticut', 'Hartford', 41.767, -72.677),
+                    ('Delaware', 'Dover', 39.161921, -75.526755)]
+
+    longer_roadmap.extend(road_map)
+
+    road_map_distance = compute_total_distance(longer_roadmap)
+
+    new_road_map_tuple  = find_best_cycle(longer_roadmap)
+
+    new_road_map = new_road_map_tuple[0]
+    new_distance = new_road_map_tuple[1]
+
+    print(road_map_distance)
+    print(new_distance)
+
+    assert new_road_map != longer_roadmap
+    assert new_distance < road_map_distance
+
+
+def start_swap_threads(road_map):
+
 
     longer_roadmap = [('California', 'Sacramento', 38.555605,-121.468926),
                     ('Colorado', 'Denver', 39.7391667, -104.984167),
