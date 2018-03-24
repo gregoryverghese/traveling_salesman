@@ -10,7 +10,7 @@ def test_compute_total_distance():
 
     total_distance = compute_total_distance((road_map))
 
-    assert total_distance ==  pytest.approx(2850, 50)
+    assert total_distance ==  pytest.approx(2850, abs=50)
 
     road_map2 = [('Alabama', 'Montgomery', 32.361538, -86.279118),
                 ('Alaska', 'Juneau', 58.301935, -134.41974),
