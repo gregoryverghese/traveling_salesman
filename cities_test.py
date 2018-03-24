@@ -75,6 +75,22 @@ def test_swap_cities_index1_equals_index2(road_map):
         assert new_distance == pytest.approx(6372, abs=30)
 
 
+def test_swap_citites(road_map):
+
+    road_map_distance = 6372
+
+    new_road_map == find_best_cycle(road_map)
+
+    new_road_map = new_road_map_tuple[0]
+    new_distance = new_road_map_tuple[1]
+
+    assert new_road_map != road_map
+    assert new_distance < road_map_distance
+
+
+
+
+
 
 
 
