@@ -64,6 +64,19 @@ def test_swap_cities(road_map):
         assert new_distance == pytest.approx(6372, abs=30)
 
 
+def test_swap_citites_index1_equals_index2(road_map):
+
+        new_road_map_tuple = swap_cities(road_map, index1=1, index2=1)
+
+        new_road_map = new_road_map_tuple[0]
+        new_distance = new_road_map_tuple[1]
+
+        assert new_road_map == road_map
+        assert new_distance == pytest.approx(6372, abs=30)
+
+
+
+
 
     #385.07
     #1131.28
