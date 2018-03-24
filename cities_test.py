@@ -21,7 +21,7 @@ def test_compute_total_distance(road_map):
 
 
 
-def test_compute_total_distance_two_locations():
+def test_compute_total_distance_two_location0s():
 
     road_map1 = [('Alabama', 'Montgomery', 32.361538, -86.279118),
                 ('Alaska', 'Juneau', 58.301935, -134.41974)]
@@ -75,16 +75,26 @@ def test_swap_cities_index1_equals_index2(road_map):
         assert new_distance == pytest.approx(6372, abs=30)
 
 
-def test_swap_citites(road_map):
+def test_swap_cities(road_map):
 
-    road_map_distance = 6372
+    longer_roadmap = [('California', 'Sacramento', 38.555605,-121.468926),
+                    ('Colorado', 'Denver', 39.7391667, -104.984167),
+                    ('Connecticut', 'Hartford', 41.767, -72.677),
+                    ('Delaware', 'Dover', 39.161921, -75.526755)]
 
-    new_road_map == find_best_cycle(road_map)
+    longer_roadmap.extend(road_map)
+
+    road_map_distance = compute_total_distance(longer_roadmap)
+
+    new_road_map_tuple  = find_best_cycle(longer_roadmap)
 
     new_road_map = new_road_map_tuple[0]
     new_distance = new_road_map_tuple[1]
 
-    assert new_road_map != road_map
+    print(road_map_distance)
+    print(new_distance)
+
+    assert new_road_map != longer_roadmap
     assert new_distance < road_map_distance
 
 
