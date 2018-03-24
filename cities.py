@@ -1,4 +1,5 @@
 import random
+import thread
 from functools import reduce
 from earth_distance import distance
 
@@ -90,21 +91,10 @@ def swap_cities(road_map, index1, index2):
 
     return (adj_roadmap, total_distance)
 
-def find_best_cycle(road_map):
-    """
-    Using a combination of `swap_cities` and `swap_adjacent_cities`,
-    try `10000` swaps, and each time keep the best cycle found so far.
-    After `10000` swaps, return the best cycle found so far.
-    """
-    optimal = (road_map[:], compute_total_distance(road_map))
 
+def start_swap_cities_thread(road_map, optimal):
 
-    for i in range(5000):
-        index = int(7 * random.random())
-        if swap_adjacent_cities(road_map, index) < optimal[1]:
-            optimal = swap_adjacent_cities(road_map, index)
-        else:
-            optimal
+    print('thread 1')
 
     for i in range(5000):
         index1 = int(8 * random.random())
@@ -113,6 +103,32 @@ def find_best_cycle(road_map):
             optimal = swap_cities(road_map, index1, index2)
         else:
              optimal
+    print(optimal)
+    return optimal
+
+
+def start_swap_adjacent_thread(road_map, optimal):
+    print('thread 2')
+    for i in range(5000):
+        index = int(7 * random.random())
+        if swap_adjacent_cities(road_map, index) < optimal[1]:
+            optimal = swap_adjacent_cities(road_map, index)
+        else:
+            optimal
+    print(optimal)
+    return optimal
+
+
+def find_best_cycle(road_map):
+    """
+    Using a combination of `swap_cities` and `swap_adjacent_cities`,
+    try `10000` swaps, and each time keep the best cycle found so far.
+    After `10000` swaps, return the best cycle found so far.
+    """
+    optimal = (road_map[:], compute_total_distance(road_map))
+
+    thread.start_new_thread(start_swap_adjacent_thread, (road_map, optimal))
+    thread.start_new_thread(start_swap_cities_thread, (road_map, optimal))
 
     return  optimal
 
