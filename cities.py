@@ -63,7 +63,14 @@ def swap_adjacent_cities(road_map, index):
 
         (new_road_map, new_total_distance)
     """
-    pass
+
+    adj_roadmap = road_map[:]
+    adj_roadmap[index], adj_roadmap[index+1] = adj_roadmap[index+1], adj_roadmap[index]
+
+    total_distance = compute_total_distance(adj_roadmap)
+
+    return (adj_roadmap, total_distance)
+
 
 def swap_cities(road_map, index1, index2):
     """
