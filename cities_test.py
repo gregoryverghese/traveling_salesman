@@ -19,12 +19,17 @@ def test_compute_total_distance(road_map):
 
     assert total_distance2 == pytest.approx(6372, abs=30)
 
+
+
+def test_compute_total_distance_two_locations():
+
     road_map1 = [('Alabama', 'Montgomery', 32.361538, -86.279118),
                 ('Alaska', 'Juneau', 58.301935, -134.41974)]
 
     total_distance = compute_total_distance((road_map1))
 
     assert total_distance ==  pytest.approx(2870, abs=50)
+
 
 
 def test_swap_adjacent_cities(road_map):
@@ -41,6 +46,9 @@ def test_swap_adjacent_cities(road_map):
 
     assert new_road_map == adjusted_road_map
     assert new_distance == pytest.approx(6397, abs=50)
+
+
+
 
 #385.07
 #2004.89
