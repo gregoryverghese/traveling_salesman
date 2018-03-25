@@ -94,7 +94,7 @@ def test_find_best_cycle(road_map):
     print(road_map_distance)
     print(new_distance)
 
-    assert new_road_map == longer_roadmap
+    assert new_road_map != longer_roadmap
     #assert new_distance < road_map_distance
 
 
