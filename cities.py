@@ -17,7 +17,8 @@ def read_cities(file_name):
     """
     road_map = [tuple(line.strip('\n').split('\t')) for line in open(file_name, 'r')]
 
-    print_cities(road_map)
+    road_map = [tuple(float(city[i]) if i > 1 else city[i] for i in range(len(city)))
+                                                                        for city in road_map]
 
     return road_map
 
@@ -26,7 +27,7 @@ def print_cities(road_map):
     Prints a list of cities, along with their locations.
     Print only one or two digits after the decimal point.
     """
-    cities_lst = [city[1] + " - (" + city[2] + "," + city[3] + ") "
+    cities_lst = [city[1] + " - (" + str(city[2]) + "," + str(city[3]) + ") "
                                                                     for city in road_map]
     print(cities_lst)
 
@@ -170,6 +171,8 @@ def main():
     """
 
     road_map = read_cities('city-data.txt')
+    print(compute_total_distance(road_map))
+    #print_cities(road_map)
     optimal = find_best_cycle(road_map)
     print(optimal[1])
     pass
