@@ -97,8 +97,10 @@ def start_swap_cities_thread(road_map, distance):
     #print('thread 1')
 
     #for i in range(5000):
-    index1 = int(8 * random.random())
-    index2 = int(8 * random.random())
+
+
+    index1 = int(len(road_map) * random.random())
+    index2 = int(len(road_map) * random.random())
 
     optimal = (road_map[:], distance)
 
@@ -113,7 +115,7 @@ def start_swap_cities_thread(road_map, distance):
 def start_swap_adjacent_thread(road_map, distance):
     #print('thread 2')
     #for i in range(5000):
-    index = int(7 * random.random())
+    index = int((len(road_map) -1) * random.random())
 
     optimal = (road_map[:], distance)
 
@@ -166,8 +168,12 @@ def main():
     Reads in, and prints out, the city data, then creates the "best"
     cycle and prints it out.
     """
+
+    road_map = read_cities('city-data.txt')
+    optimal = find_best_cycle(road_map)
+    print(optimal[1])
     pass
 
 if __name__ == "__main__":
-    read_cities('city-data.txt')
+
     main()
