@@ -1,7 +1,10 @@
 import random
+
+
 import thread
 from functools import reduce
 from earth_distance import distance
+
 
 
 def read_cities(file_name):
@@ -118,6 +121,7 @@ def start_swap_adjacent_thread(road_map, distance):
     #for i in range(5000):
     index = int((len(road_map) -1) * random.random())
 
+
     optimal = (road_map[:], distance)
 
     if swap_adjacent_cities(road_map, index)[1] < distance:
@@ -164,15 +168,18 @@ def print_map(road_map):
     """
     pass
 
+
 def main():
     """
     Reads in, and prints out, the city data, then creates the "best"
     cycle and prints it out.
     """
 
+
+
     road_map = read_cities('city-data.txt')
     print(compute_total_distance(road_map))
-    #print_cities(road_map)
+    print_cities(road_map)
     optimal = find_best_cycle(road_map)
     print(optimal[1])
     pass
