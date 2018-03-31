@@ -96,40 +96,62 @@ def swap_cities(road_map, index1, index2):
     return (adj_roadmap, total_distance)
 
 
-def start_swap_cities_thread(road_map, distance):
-
-    #print('thread 1')
-
-    #for i in range(5000):
-
+def start_swap_cities(road_map, distance):
+    """
+    Takes the road_map and it's current distance. Randomly chooses two indicies
+    and passes them to the swap_cities function with the roadmap. Then checks if
+    the function has returned a new road_map with a shorter distance than before,
+    and assigns this as the new route if True. Returns optimal, a tuple with the
+    shortest road_map and it's corresponding distance.
+    """
 
     index1 = int(len(road_map) * random.random())
     index2 = int(len(road_map) * random.random())
 
-    optimal = (road_map[:], distance)
-
-    if swap_cities(road_map, index1, index2)[1] < distance:
-        optimal = swap_cities(road_map, index1, index2)
-        road_map = optimal[0]
-        distance = optimal[1]
+    new_map_tuple = swap_cities(road_map, index1, index2)
+    optimal = new_map_tuple if new_map_tuple[1] < distance else (road_map, distance)
 
     return optimal
 
 
-def start_swap_adjacent_thread(road_map, distance):
-    #print('thread 2')
-    #for i in range(5000):
-    index = int((len(road_map) -1) * random.random())
+def start_swap_adjacent(road_map, distance):
+    """
+    Takes the road_map and it's current distance. Randomly chooses a index
+    and passes it to the swap_adjacent_cities function with the roadmap.
+    Then checks if the function has returned a new road_map with a shorter
+    distance than before, and assigns this as the new route if True.
+    Returns optimal, a tuple with the  shortest road_map and it's corresponding distance.
+    """
 
+    index = int((len(road_map)) * random.random())
 
-    optimal = (road_map[:], distance)
-
-    if swap_adjacent_cities(road_map, index)[1] < distance:
-        optimal = swap_adjacent_cities(road_map, index)
-        road_map = optimal[0]
-        distance = optimal[1]
+    new_map_tuple = swap_adjacent_cities(road_map, index)
+    optimal = new_map_tuple if new_map_tuple[1] < distance else (road_map, distance)
 
     return optimal
+
+
+def opt2(best_map, i, j):
+
+    new_map = best_map[:]
+    new_map[i:j] = reversed(bst_map[i:j + 1])
+    best_distance = compute_total_distance(best_map)
+    new_distance = compute_total_distance(new_map)
+    optimal = (new_map, True) if new_distance < best_distance else (best_map, False )
+    return optimal
+
+def start_opt2(road_map):
+
+    best_map = road_map[:]
+    found = True
+
+    for i in range(len(best_map) + 1):
+        for j in range(i+1, len(best_map)):
+            best_map = opt2(best_map, i, j)[0] if opt2(i, j)[1] else break
+        if opt2(i, j)[1]:
+            break
+
+    return best_map
 
 
 def find_best_cycle(road_map):
@@ -142,21 +164,20 @@ def find_best_cycle(road_map):
     new_road_map = road_map[:]
     cycle_distance = compute_total_distance(road_map)
 
-    for i in range(10000):
-        test = int(100 * random.random())
-        if test < 50:
-            optimal = start_swap_cities_thread(new_road_map, cycle_distance)
+    for i in range(5):
+            optimal = start_swap_cities(new_road_map, cycle_distance)
             new_road_map = optimal[0]
-            cycle_distance = optimal[1]
+            cycle_distance = compute_total_distance(new_road_map)
 
-        else:
-            optimal = start_swap_adjacent_thread(new_road_map, cycle_distance)
+    for i in range(5):
+            optimal = start_swap_adjacent(new_road_map, cycle_distance)
             new_road_map = optimal[0]
-            cycle_distance = optimal[1]
+            cycle_distance = compute_total_distance(new_road_map)
+
+    new_road_map = opt2(new_road_map)
+    optimal = (new_road_map, compute_total_distance(new_road_map))
 
     return  optimal
-    #thread.start_new_thread(start_swap_adjacent_thread, (road_map, optimal))
-    #thread.start_new_thread(start_swap_cities_thread, (road_map, optimal))
 
 
 
@@ -174,12 +195,9 @@ def main():
     Reads in, and prints out, the city data, then creates the "best"
     cycle and prints it out.
     """
-
-
-
     road_map = read_cities('city-data.txt')
     print(compute_total_distance(road_map))
-    print_cities(road_map)
+    #print_cities(road_map)
     optimal = find_best_cycle(road_map)
     print(optimal[1])
     pass

@@ -145,6 +145,29 @@ def start_swap_adjacent_threads(road_map):
     assert new_distance < road_map_distance
 
 
+def test_2opt(road_map):
+
+        longer_roadmap = [('California', 'Sacramento', 38.555605,-121.468926),
+                        ('Colorado', 'Denver', 39.7391667, -104.984167),
+                        ('Connecticut', 'Hartford', 41.767, -72.677),
+                        ('Delaware', 'Dover', 39.161921, -75.526755)]
+
+        longer_roadmap.extend(road_map)
+        road_map_distance = compute_total_distance(longer_roadmap)
+
+        new_road_map = opt2(longer_roadmap)
+        new_distance = compute_total_distance(new_road_map)
+        print(road_map_distance)
+        print(new_distance)
+        print(new_road_map)
+
+        assert new_road_map != longer_roadmap
+        assert new_distance < road_map_distance
+
+
+
+
+
 
 
 
