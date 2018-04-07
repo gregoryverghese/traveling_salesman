@@ -8,3 +8,7 @@ class swapThread(threading.Thread):
     def run(self):
         find_best_cycle(road_map)
         '''
+
+
+    #thread.start_new_thread(start_swap_adjacent_thread, (road_map, optimal))
+    #thread.start_new_thread(start_swap_cities_thread, (road_map, optimal))

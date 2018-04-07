@@ -156,6 +156,7 @@ def test_2opt(road_map):
         road_map_distance = compute_total_distance(longer_roadmap)
 
         new_road_map = opt2(longer_roadmap)
+
         new_distance = compute_total_distance(new_road_map)
         print(road_map_distance)
         print(new_distance)

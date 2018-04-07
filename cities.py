@@ -123,7 +123,7 @@ def start_swap_adjacent(road_map, distance):
     Returns optimal, a tuple with the  shortest road_map and it's corresponding distance.
     """
 
-    index = int((len(road_map)) * random.random())
+    index = int((len(road_map) - 1) * random.random())
 
     new_map_tuple = swap_adjacent_cities(road_map, index)
     optimal = new_map_tuple if new_map_tuple[1] < distance else (road_map, distance)
@@ -131,27 +131,36 @@ def start_swap_adjacent(road_map, distance):
     return optimal
 
 
-def opt2(best_map, i, j):
+def opt2(best_map, i):
 
-    new_map = best_map[:]
-    new_map[i:j] = reversed(bst_map[i:j + 1])
-    best_distance = compute_total_distance(best_map)
-    new_distance = compute_total_distance(new_map)
-    optimal = (new_map, True) if new_distance < best_distance else (best_map, False )
-    return optimal
+    for j in range(1, len(best_map)):
+
+        new_map = best_map[:]
+        new_map[i:j] = best_map[j:i:-1]
+        #new_distance = compute_total_distance(new_map)
+
+        yield new_map
+
+def getbestmap(best_map, i):
+
+    distance_lst =list(map(compute_total_distance, list(opt2(best_map, i))))
+    new_distance = min(distance_lst)
+    new_distance_index = distance_lst.index(new_distance)
+    new_map = list(opt2(best_map, i))[new_distance_index]
+
+    return new_map
+
 
 def start_opt2(road_map):
 
-    best_map = road_map[:]
-    found = True
+   best_map = road_map[:]
+   best_distance = compute_total_distance(best_map)
 
-    for i in range(len(best_map) + 1):
-        for j in range(i+1, len(best_map)):
-            best_map = opt2(best_map, i, j)[0] if opt2(i, j)[1] else break
-        if opt2(i, j)[1]:
-            break
+   for i in range(len(best_map) + 1):
+       new_map = getbestmap(best_map, i)
+       best_map = new_map
+   return best_map
 
-    return best_map
 
 
 def find_best_cycle(road_map):
@@ -164,17 +173,20 @@ def find_best_cycle(road_map):
     new_road_map = road_map[:]
     cycle_distance = compute_total_distance(road_map)
 
-    for i in range(5):
+    for i in range(5000):
             optimal = start_swap_cities(new_road_map, cycle_distance)
             new_road_map = optimal[0]
             cycle_distance = compute_total_distance(new_road_map)
 
-    for i in range(5):
+    for i in range(5000):
             optimal = start_swap_adjacent(new_road_map, cycle_distance)
             new_road_map = optimal[0]
             cycle_distance = compute_total_distance(new_road_map)
 
-    new_road_map = opt2(new_road_map)
+    print('1st ' + str(cycle_distance))
+    new_road_map = start_opt2(new_road_map)
+    cycle_distance = compute_total_distance(new_road_map)
+    print('2nd ' + str(cycle_distance))
     optimal = (new_road_map, compute_total_distance(new_road_map))
 
     return  optimal
