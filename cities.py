@@ -1,11 +1,6 @@
 import random
-
-
-import thread
 from functools import reduce
 from earth_distance import distance
-
-
 
 def read_cities(file_name):
     """
@@ -131,36 +126,46 @@ def start_swap_adjacent(road_map, distance):
     return optimal
 
 
-def opt2(best_map, i):
+def gen_2opt(best_map, i):
+    """2opt generator: takes the list best_map and replaces element between
+    [i:j] so we have reversed[i:j]"""
 
-    for j in range(1, len(best_map)):
+    for j in range(i, len(best_map)):
 
         new_map = best_map[:]
         new_map[i:j] = best_map[j:i:-1]
-        #new_distance = compute_total_distance(new_map)
 
         yield new_map
 
-def getbestmap(best_map, i):
-
-    distance_lst =list(map(compute_total_distance, list(opt2(best_map, i))))
+def get_2opt(best_map, i):
+    """
+    For each element in the map we perform a 2opt optimization.
+    we use the 2opt generator,compute the distancefor al the possible maps
+    find the minimum and then its corresponding map using it's index in the list
+    and return the map.
+    """
+    distance_lst =list(map(compute_total_distance, list(gen_2opt(best_map, i))))
     new_distance = min(distance_lst)
     new_distance_index = distance_lst.index(new_distance)
-    new_map = list(opt2(best_map, i))[new_distance_index]
+    new_map = list(gen_2opt(best_map, i))[new_distance_index]
 
     return new_map
 
 
-def start_opt2(road_map):
+def start_2opt(road_map):
+    """
+    We further reduce the distance travelled by using a
+    2opt approach to remove any crossover on our route.
+    We pass in the roadmap and loop over passing it to the
+    2opt algorithm. Return the roadmap at the end.
+    """
 
-   best_map = road_map[:]
-   best_distance = compute_total_distance(best_map)
+    best_map = road_map[:]
 
-   for i in range(len(best_map) + 1):
-       new_map = getbestmap(best_map, i)
-       best_map = new_map
-   return best_map
+    for i in range(len(best_map) - 1):
+        best_map = get_2opt(best_map, i)
 
+    return best_map
 
 
 def find_best_cycle(road_map):
@@ -184,7 +189,7 @@ def find_best_cycle(road_map):
             cycle_distance = compute_total_distance(new_road_map)
 
     print('1st ' + str(cycle_distance))
-    new_road_map = start_opt2(new_road_map)
+    new_road_map = start_2opt(new_road_map)
     cycle_distance = compute_total_distance(new_road_map)
     print('2nd ' + str(cycle_distance))
     optimal = (new_road_map, compute_total_distance(new_road_map))
