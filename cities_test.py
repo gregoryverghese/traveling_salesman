@@ -21,7 +21,20 @@ def test_compute_total_distance(road_map):
 
 
 
-def test_compute_total_distance_two_location0s():
+def test_get_lats_longs(road_map):
+
+    lat_longs_test = [(32.361538, -86.279118, 58.301935, -134.41974),
+    (58.301935, -134.41974, 33.448457, -112.073844 ),
+    (33.448457, -112.073844, 34.736009, -92.331122),
+    (34.736009, -92.331122, 32.361538, -86.279118)]
+
+    lats_longs_lst = get_lats_longs(road_map)
+
+    assert lats_longs_lst == lat_longs_test
+
+
+
+def test_compute_total_distance_two_locations():
 
     road_map1 = [('Alabama', 'Montgomery', 32.361538, -86.279118),
                 ('Alaska', 'Juneau', 58.301935, -134.41974)]
@@ -83,6 +96,7 @@ def test_find_best_cycle(road_map):
                     ('Delaware', 'Dover', 39.161921, -75.526755)]
 
     longer_roadmap.extend(road_map)
+    cities = set(map(lambda x: x[0], longer_roadmap))
 
     road_map_distance = compute_total_distance(longer_roadmap)
 
@@ -90,105 +104,8 @@ def test_find_best_cycle(road_map):
 
     new_road_map = new_road_map_tuple[0]
     new_distance = new_road_map_tuple[1]
-
-    print(road_map_distance)
-    print(new_distance)
-
-    assert new_road_map != longer_roadmap
-    #assert new_distance < road_map_distance
-
-
-def start_swap_cities_threads(road_map):
-
-
-    longer_roadmap = [('California', 'Sacramento', 38.555605,-121.468926),
-                    ('Colorado', 'Denver', 39.7391667, -104.984167),
-                    ('Connecticut', 'Hartford', 41.767, -72.677),
-                    ('Delaware', 'Dover', 39.161921, -75.526755)]
-
-    longer_roadmap.extend(road_map)
-
-    road_map_distance = compute_total_distance(longer_roadmap)
-
-    new_road_map_tuple  = find_best_cycle(longer_roadmap)
-
-    new_road_map = new_road_map_tuple[0]
-    new_distance = new_road_map_tuple[1]
-
-    print(road_map_distance)
-    print(new_distance)
+    new_citites =  set(map(lambda x: x[0], new_road_map))
 
     assert new_road_map != longer_roadmap
     assert new_distance < road_map_distance
-
-
-def start_swap_adjacent_threads(road_map):
-
-    longer_roadmap = [('California', 'Sacramento', 38.555605,-121.468926),
-                    ('Colorado', 'Denver', 39.7391667, -104.984167),
-                    ('Connecticut', 'Hartford', 41.767, -72.677),
-                    ('Delaware', 'Dover', 39.161921, -75.526755)]
-
-    longer_roadmap.extend(road_map)
-
-    road_map_distance = compute_total_distance(longer_roadmap)
-
-    new_road_map_tuple  = find_best_cycle(longer_roadmap)
-
-    new_road_map = new_road_map_tuple[0]
-    new_distance = new_road_map_tuple[1]
-
-    print(road_map_distance)
-    print(new_distance)
-
-    assert new_road_map != longer_roadmap
-    assert new_distance < road_map_distance
-
-
-def test_2opt(road_map):
-
-        longer_roadmap = [('California', 'Sacramento', 38.555605,-121.468926),
-                        ('Colorado', 'Denver', 39.7391667, -104.984167),
-                        ('Connecticut', 'Hartford', 41.767, -72.677),
-                        ('Delaware', 'Dover', 39.161921, -75.526755)]
-
-        longer_roadmap.extend(road_map)
-        road_map_distance = compute_total_distance(longer_roadmap)
-
-        new_road_map = opt2(longer_roadmap)
-
-        new_distance = compute_total_distance(new_road_map)
-        print(road_map_distance)
-        print(new_distance)
-        print(new_road_map)
-
-        assert new_road_map != longer_roadmap
-        assert new_distance < road_map_distance
-
-
-
-
-
-
-
-
-
-
-
-
-
-    #385.07
-    #1131.28
-    #2004.89
-    #2851.48
-
-
-
-
-
-
-
-#385.07
-#2004.89
-#1494.31
-#2512.55
+    assert cities == new_citites

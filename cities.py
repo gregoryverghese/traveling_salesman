@@ -30,25 +30,35 @@ def print_cities(road_map):
     print(cities_lst)
 
 
+def get_lats_longs(road_map):
+    """
+    Returns a list of tuples containing (latitude, longitudes, lattiudes2, longitudes2)
+    for the city and the next city in the route
+    """
+
+    lattiudes = [city[2] for city in road_map]
+    longitudes = [city[3] for city in road_map]
+    lattiudes2 = [lattiudes[(i + 1) % len(lattiudes)] for i in range(len(lattiudes))]
+    longitudes2 = [longitudes[(i + 1) % len(longitudes)]  for i in range(len(longitudes))]
+
+    return list(zip(lattiudes, longitudes, lattiudes2, longitudes2))
+
+
 def compute_total_distance(road_map):
     """
     Returns, as a floating point number, the sum of the distances of all
     the connections in the `road_map`. Remember that it's a cycle, so that
     (for example) in the initial `road_map`, Wyoming connects to Alabama...
     """
-
     if len(road_map) > 2:
-        lattiudes = [city[2] for city in road_map]
-        longitudes = [city[3] for city in road_map]
-        lattiudes2 = [lattiudes[(i + 1) % len(lattiudes)] for i in range(len(lattiudes))]
-        longitudes2 = [longitudes[(i + 1) % len(longitudes)]  for i in range(len(longitudes))]
-        intercity_dis = list(map(distance, lattiudes, longitudes, lattiudes2, longitudes2))
+        lats_longs_lst = get_lats_longs(road_map)
     else:
-        lattiudes = [road_map[0][2]]
-        longitudes = [road_map[0][3]]
-        lattiudes2 = [road_map[1][2]]
-        longitudes2 = [road_map[1][3]]
-        intercity_dis = list(map(distance, lattiudes, longitudes, lattiudes2, longitudes2))
+        lats_longs_lst = [(road_map[0][2], road_map[0][3],
+                                            road_map[1][2], road_map[1][3])]
+
+    distance_func_list = [distance for i in range(len(lats_longs_lst))]
+    intercity_dis = list(map(lambda f, x: f(x[0], x[1], x[2], x[3]),
+                                                distance_func_list, lats_longs_lst))
 
     return reduce(lambda x, y: x+y, intercity_dis)
 
@@ -126,48 +136,6 @@ def start_swap_adjacent(road_map, distance):
     return optimal
 
 
-def gen_2opt(best_map, i):
-    """2opt generator: takes the list best_map and replaces element between
-    [i:j] so we have reversed[i:j]"""
-
-    for j in range(i, len(best_map)):
-
-        new_map = best_map[:]
-        new_map[i:j] = best_map[j:i:-1]
-
-        yield new_map
-
-def get_2opt(best_map, i):
-    """
-    For each element in the map we perform a 2opt optimization.
-    we use the 2opt generator,compute the distancefor al the possible maps
-    find the minimum and then its corresponding map using it's index in the list
-    and return the map.
-    """
-    distance_lst =list(map(compute_total_distance, list(gen_2opt(best_map, i))))
-    new_distance = min(distance_lst)
-    new_distance_index = distance_lst.index(new_distance)
-    new_map = list(gen_2opt(best_map, i))[new_distance_index]
-
-    return new_map
-
-
-def start_2opt(road_map):
-    """
-    We further reduce the distance travelled by using a
-    2opt approach to remove any crossover on our route.
-    We pass in the roadmap and loop over passing it to the
-    2opt algorithm. Return the roadmap at the end.
-    """
-
-    best_map = road_map[:]
-
-    for i in range(len(best_map) - 1):
-        best_map = get_2opt(best_map, i)
-
-    return best_map
-
-
 def find_best_cycle(road_map):
     """
     Using a combination of `swap_cities` and `swap_adjacent_cities`,
@@ -188,10 +156,6 @@ def find_best_cycle(road_map):
             new_road_map = optimal[0]
             cycle_distance = compute_total_distance(new_road_map)
 
-    print('1st ' + str(cycle_distance))
-    new_road_map = start_2opt(new_road_map)
-    cycle_distance = compute_total_distance(new_road_map)
-    print('2nd ' + str(cycle_distance))
     optimal = (new_road_map, compute_total_distance(new_road_map))
 
     return  optimal
@@ -204,7 +168,19 @@ def print_map(road_map):
     their connections, along with the cost for each connection
     and the total cost.
     """
-    pass
+    total_distance = compute_total_distance(road_map)
+    gps = get_lats_longs(road_map)
+    distance_func_list = [distance for i in range(len(gps))]
+    cost = list(map(lambda f, x: f(x[0], x[1], x[2], x[3]), distance_func_list, gps))
+    start_cities = list(map(lambda x: x[1], road_map))
+    end_cities = [start_cities[(i + 1) % len(start_cities)] for i in range(len(start_cities))]
+    cities_cost_lst = list(zip(start_cities, end_cities, cost))
+
+    print('The total distance for the route is {} \n'.format(total_distance))
+
+    for city in cities_cost_lst:
+        print ('{}: The distance to {} is {}'.format(city[0], city[1],city[2]))
+
 
 
 def main():
@@ -213,11 +189,10 @@ def main():
     cycle and prints it out.
     """
     road_map = read_cities('city-data.txt')
-    print(compute_total_distance(road_map))
-    #print_cities(road_map)
+    print_cities(road_map)
     optimal = find_best_cycle(road_map)
-    print(optimal[1])
-    pass
+    print_map(optimal[0])
+
 
 if __name__ == "__main__":
 
