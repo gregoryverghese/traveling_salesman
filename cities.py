@@ -25,9 +25,9 @@ def print_cities(road_map):
     Prints a list of cities, along with their locations.
     Print only one or two digits after the decimal point.
     """
-    cities_lst = [city[1] + " - (" + str(city[2]) + "," + str(city[3]) + ") "
-                                                                    for city in road_map]
-    print(cities_lst)
+    for city in road_map:
+            print ('State: {0}, City: {1}, Latitude: {2:.2f}, Longitude: {3:.2f}'.format(
+                                                                        city[0],city[1],city[2], city[3]))
 
 
 def get_lats_longs(road_map):
@@ -176,10 +176,10 @@ def print_map(road_map):
     end_cities = [start_cities[(i + 1) % len(start_cities)] for i in range(len(start_cities))]
     cities_cost_lst = list(zip(start_cities, end_cities, cost))
 
-    print('The total distance for the route is {} \n'.format(total_distance))
+    print('The total distance for the route is {0:.2f} \n'.format(total_distance))
 
     for city in cities_cost_lst:
-        print ('{}: The distance to {} is {}'.format(city[0], city[1],city[2]))
+        print ('{0}: The distance to {1} is {2:.2f}'.format(city[0], city[1],city[2]))
 
 
 
