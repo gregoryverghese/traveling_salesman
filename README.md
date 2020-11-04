@@ -1,15 +1,5 @@
 # Traveling Salesman
 
-This coursework considers a simplified version of the travelling salesman problem.
-
-## Purposes of this assignment
-
-- To gain further experience with *Test-Driven-Development* (TDD).
-- To give you more practice with writing tests.
-- To get you started thinking about how to solve problems with programs.
-- To give you further practice using the Travis Continuous Integration (CI) process.
-- To make you consider different search algorithms and data structures.
-
 ## General idea of the assignment
 
 Suppose there are a number of "cities", as in shown in Figure 1 below:
