@@ -6,7 +6,8 @@ then return to their starting point with the minimal distance travelled. Approac
   * hill climbing approach
   * heuristic algorithms
 
-### Data representation
+Data representation
+--------------------
 
 Data is included in `city-data.txt`, containing the latitudes and longitudes of the fifty state capitals of the U.S.A.  Each line contains:
 - the name of the state, 
