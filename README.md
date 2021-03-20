@@ -3,7 +3,7 @@
 A number of solutions to the classic travelling salesman NP-hard formulation; traveling salesman wishes to visit every city exactly once, 
 then return to their starting point with the minimal distance travelled. Approaches: 
   
-  * hill climbing& approach
+  * hill climbing approach
   * heuristic algorithms
 
 ### Data representation
