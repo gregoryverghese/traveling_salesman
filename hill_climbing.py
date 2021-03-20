@@ -188,7 +188,7 @@ def main():
     Reads in, and prints out, the city data, then creates the "best"
     cycle and prints it out.
     """
-    road_map = read_cities('city-data.txt')
+    road_map = read_cities('data/city_data.txt')
     print_cities(road_map)
     optimal = find_best_cycle(road_map)
     print_map(optimal[0])
